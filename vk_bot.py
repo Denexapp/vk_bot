@@ -1,4 +1,4 @@
-import queue as queue_file
+import myqueue as queue_file
 import status_checker as status_checker_file
 import vk
 import os
