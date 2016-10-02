@@ -26,7 +26,7 @@ class StatusChecker:
         return self.api.messages.send(user_id=target, message=message, v="4.104")
 
     async def get_name(self, target):
-        target_info = await self.queue.enqueue(self.api_get_name, target)[0]
+        target_info = (await self.queue.enqueue(self.api_get_name, target))[0]
         target_name = target_info["first_name"] + " " + target_info["last_name"]
         target_gender = target_info["sex"] == 1
         return target_name, target_gender
