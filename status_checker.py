@@ -42,7 +42,7 @@ class StatusChecker:
         await self.queue.enqueue(self.api_send_message, target, message)
 
     async def run(self):
-        self.name, self.gender = self.api_get_name(self.target)
+        self.name, self.gender = self.get_name(self.target)
         while True:
             status = await self.get_status(self.target)
             if status is None:
