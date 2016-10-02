@@ -5,7 +5,7 @@ import os
 import time
 
 
-def run():
+async def run():
     queue = queue_file.Queue()
     target = os.environ['target']
     listener = os.environ['listener']
@@ -15,7 +15,7 @@ def run():
     api = vk.API(session)
 
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
-    status_checker.run()
+    await status_checker.run()
 
 run()
 while True:
