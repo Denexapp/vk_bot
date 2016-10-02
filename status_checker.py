@@ -43,8 +43,10 @@ class StatusChecker:
 
     async def run(self):
         self.name, self.gender = await self.get_name(self.target)
+        print("Received name {}".format(self.name))
         while True:
             status = await self.get_status(self.target)
+            print("Got status {}".format(status))
             if status is None:
                 self.status = status
             elif status != self.status:
