@@ -29,6 +29,7 @@ class Queue:
             await asyncio.sleep(0.2)
         sleep_time = self.last_request_time - time.time() + 1
         await asyncio.sleep(sleep_time if sleep_time >= 0 else 0)
+        print("Type of 'function' is {}".format(type(function)))
         result = await function(*args, **kwargs)
         self.queue_current = self.increment(self.queue_current)
         return result
