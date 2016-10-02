@@ -1,8 +1,8 @@
+import asyncio
 import myqueue as queue_file
 import status_checker as status_checker_file
 import vk
 import os
-import time
 
 
 async def run():
@@ -16,7 +16,10 @@ async def run():
 
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
     await status_checker.run()
+    while True:
+        await asyncio.sleep(10)
 
-run()
-while True:
-    time.sleep(10)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(run())
+loop.close()
