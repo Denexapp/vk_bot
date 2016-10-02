@@ -1,7 +1,6 @@
 import vk_tools
-import requests
-import time
 import asyncio
+
 
 class StatusChecker:
     def __init__(self, queue, listener, target, api):
@@ -13,45 +12,17 @@ class StatusChecker:
         self.name = None
         self.gender = None
 
-    @vk_tools.handle_captcha
-    def api_get_status(self, target):
-        return self.api.users.get(user_ids=target, fields="status")
-
-    @vk_tools.handle_captcha
-    def api_get_name(self, target):
-        return self.api.users.get(user_ids=target, fields="sex")
-
-    @vk_tools.handle_captcha
-    def api_send_message(self, target, message):
-        return self.api.messages.send(user_id=target, message=message, v="4.104")
-
-    async def get_name(self, target):
-        target_info = (await self.queue.enqueue(self.api_get_name, target))[0]
-        target_name = target_info["first_name"] + " " + target_info["last_name"]
-        target_gender = target_info["sex"] == 1
-        return target_name, target_gender
-
-    async def get_status(self, target):
-        while True:
-            try:
-                return (await self.queue.enqueue(self.api_get_status, target))[0]["status"]
-            except requests.exceptions.ReadTimeout:
-                pass
-
-    async def send_message(self, target, message):
-        await self.queue.enqueue(self.api_send_message, target, message)
-
     async def run(self):
-        self.name, self.gender = await self.get_name(self.target)
-        print("Received name {}".format(self.name))
+        self.name, self.gender = await vk_tools.get_name(self.target, self.queue, self.api)
+        print("StatusChecker: Received name {}".format(self.name))
         while True:
-            status = await self.get_status(self.target)
-            print("Got status {}".format(status))
+            status = await vk_tools.get_status(self.target, self.queue, self.api)
+            print("StatusChecker: Got status {}".format(status))
             if status is None:
                 self.status = status
             elif status != self.status:
                 self.status = status
-                await self.send_message(self.listener, "{} has changed {} status to \"{}\""
-                                        .format(self.name, "her" if self.gender else "his", status))
+                await vk_tools.send_message(self.listener, "{} has changed {} status to \"{}\""
+                                            .format(self.name, "her" if self.gender else "his", status),
+                                            self.queue, self.api)
             await asyncio.sleep(10)
-            print("run loop keeps looping")

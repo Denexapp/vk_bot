@@ -15,7 +15,7 @@ async def run():
     api = vk.API(session)
 
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
-    await status_checker.run()
+    status_checker.run()
     while True:
         await asyncio.sleep(10)
 
