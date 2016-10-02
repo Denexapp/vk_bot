@@ -1,7 +1,7 @@
 import vk_tools
 import requests
 import time
-
+import asyncio
 
 class StatusChecker:
     def __init__(self, queue, listener, target, api):
@@ -51,4 +51,5 @@ class StatusChecker:
                 self.status = status
                 await self.send_message(self.listener, "{} has changed {} status to \"{}\""
                                         .format(self.name, "her" if self.gender else "his", status))
-            time.sleep(10)
+            asyncio.sleep(10)
+            print("run loop keeps looping")
