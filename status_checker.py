@@ -53,5 +53,5 @@ class StatusChecker:
                 self.status = status
                 await self.send_message(self.listener, "{} has changed {} status to \"{}\""
                                         .format(self.name, "her" if self.gender else "his", status))
-            asyncio.sleep(10)
+            await asyncio.sleep(10)
             print("run loop keeps looping")
