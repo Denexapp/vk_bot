@@ -34,7 +34,7 @@ class StatusChecker:
     async def get_status(self, target):
         while True:
             try:
-                return await self.queue.enqueue(self.api_get_status, target)[0]["status"]
+                return (await self.queue.enqueue(self.api_get_status, target))[0]["status"]
             except requests.exceptions.ReadTimeout:
                 pass
 
