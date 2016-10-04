@@ -18,10 +18,14 @@ if __name__ == '__main__':
     session = vk.Session(access_token=access_token)
     api = vk.API(session)
 
-    status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
-    schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
+    async def main_loop():
+        status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
+        schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
+        status_checker.run()
+        schedule.run()
+        while True:
+            asyncio.sleep(10)
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(status_checker.run())
-    loop.run_until_complete(schedule.run())
+    loop.run_until_complete(main_loop())
     loop.close()
