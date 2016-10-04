@@ -9,6 +9,7 @@ def handle_captcha(function):
         try:
             return function(*args, **kwargs)
         except vk.exceptions.VkAPIError as e:
+            # todo handle only captcha
             sid = e.captcha_sid
             img = e.captcha_img
             print("Captcha img available at {}".format(img))
@@ -61,6 +62,6 @@ async def send_message(target, message, queue, api):
 
 async def get_last_messages(user_id, queue, api):
     result = await queue.enqueue(api_get_last_messages(user_id, api))
-    print(result)
-    return result
-    # todo parse messages
+    messages = [(message["mid"], message["from_id"], message["body"]) for message in result if "body" in message]
+    messages.reverse()
+    return messages

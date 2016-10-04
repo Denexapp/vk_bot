@@ -17,7 +17,7 @@ class StatusChecker:
         print("StatusChecker: Received name {}".format(self.name))
         while True:
             status = await vk_tools.get_status(self.target, self.queue, self.api)
-            print("StatusChecker: Got status {}".format(status))
+            print("StatusChecker: {} still has status {}".format(status))
             if status is None:
                 self.status = status
             elif status != self.status:
