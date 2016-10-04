@@ -73,7 +73,7 @@ class ScheduleBot:
                 name = await vk_tools.get_name(user, self.queue, self.api)
                 print("Schedule: username is {}".format(name))
                 answer = self.generate_answer(question, name)
-                vk_tools.send_message(self.dialogue, answer, self.queue, self.api)
+                await vk_tools.send_message(self.dialogue, answer, self.queue, self.api)
             await curio.sleep(10)
 
 
