@@ -1,6 +1,6 @@
 import time
 import threading
-import asyncio
+import curio
 
 
 class Queue:
@@ -26,9 +26,9 @@ class Queue:
         queue_number = self.queue_last_item
         self.queue_lock.release()
         while not queue_number == self.queue_current:
-            await asyncio.sleep(0.2)
+            await curio.sleep(0.2)
         sleep_time = self.last_request_time - time.time() + 1
-        await asyncio.sleep(sleep_time if sleep_time >= 0 else 0)
+        await curio.sleep(sleep_time if sleep_time >= 0 else 0)
         result = function(*args, **kwargs)
         self.queue_current = self.increment(self.queue_current)
         return result

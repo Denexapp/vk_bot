@@ -1,5 +1,5 @@
 import vk_tools
-import asyncio
+import curio
 import datetime
 import time
 import re
@@ -74,7 +74,7 @@ class ScheduleBot:
                 print("Schedule: username is {}".format(name))
                 answer = self.generate_answer(question, name)
                 vk_tools.send_message(self.dialogue, answer, self.queue, self.api)
-            await asyncio.sleep(10)
+            await curio.sleep(10)
 
 
 class Schedule:

@@ -1,5 +1,5 @@
 import os
-import asyncio
+import curio
 import vk
 import myqueue as queue_file
 import status_checker as status_checker_file
@@ -18,14 +18,8 @@ if __name__ == '__main__':
     session = vk.Session(access_token=access_token)
     api = vk.API(session)
 
-    async def main_loop():
-        status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
-        schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
-        status_checker.run()
-        schedule.run()
-        while True:
-            asyncio.sleep(10)
+    status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
+    schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main_loop())
-    loop.close()
+    curio.run(status_checker.run())
+    curio.run(schedule.run())

@@ -1,5 +1,5 @@
 import vk_tools
-import asyncio
+import curio
 
 
 class StatusChecker:
@@ -28,4 +28,4 @@ class StatusChecker:
                 await vk_tools.send_message(self.listener, message, self.queue, self.api)
             else:
                 print("StatusChecker: {} still has status {}".format(self.name, status))
-            await asyncio.sleep(10)
+            await curio.sleep(10)
