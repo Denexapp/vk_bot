@@ -20,12 +20,13 @@ class StatusChecker:
             status = await vk_tools.get_status(self.target, self.queue, self.api)
             if self.status is None:
                 self.status = status
+                message = "{} has status \"{}\"" \
+                    .format(self.name, status)
+                print("StatusChecker: " + message)
             elif status != self.status:
                 self.status = status
                 message = "{} has changed {} status to \"{}\""\
                     .format(self.name, "her" if self.gender else "his", status)
                 print("StatusChecker: " + message)
                 await vk_tools.send_message(self.listener, message, self.queue, self.api)
-            else:
-                print("StatusChecker: {} still has status {}".format(self.name, status))
             await curio.sleep(10)
