@@ -60,7 +60,7 @@ class ScheduleBot:
         while True:
             messages = await vk_tools.get_last_messages(self.dialogue, self.queue, self.api)
             if self.last_message_id is None:
-                self.last_message_id = messages[len(messages)-1][0]
+                self.last_message_id = messages[len(messages)-1][2]
             for mid, user, message in messages:
                 if mid <= self.last_message_id:
                     continue
@@ -84,7 +84,8 @@ class Schedule:
         self.schedule = []
 
         with open(filename) as file:
-            self.duration = int(file.readline().strip())
+            self.timezone = int(file.readline().split(":")[1].strip())
+            self.duration = int(file.readline().split(":")[1].strip())
             while True:
                 line = file.readline().strip()
                 if line.startswith("."):
