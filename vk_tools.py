@@ -61,7 +61,7 @@ async def send_message(target, message, queue, api):
 
 
 async def get_last_messages(user_id, queue, api):
-    result = await queue.enqueue(api_get_last_messages(user_id, api))
+    result = await queue.enqueue(api_get_last_messages, user_id, api)
     messages = [(message["mid"], message["from_id"], message["body"]) for message in result if "body" in message]
     messages.reverse()
     return messages
