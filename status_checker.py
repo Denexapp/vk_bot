@@ -13,11 +13,11 @@ class StatusChecker:
         self.gender = None
 
     async def run(self):
+        print("StatusChecker: started.")
         self.name, self.gender = await vk_tools.get_name(self.target, self.queue, self.api)
         print("StatusChecker: Received name {}".format(self.name))
         while True:
             status = await vk_tools.get_status(self.target, self.queue, self.api)
-
             if self.status is None:
                 self.status = status
             elif status != self.status:

@@ -56,6 +56,7 @@ class ScheduleBot:
         return answer
 
     async def run(self):
+        print("Schedule: started.")
         while True:
             messages = await vk_tools.get_last_messages(self.dialogue, self.queue, self.api)
             if self.last_message_id is None:
