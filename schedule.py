@@ -43,7 +43,7 @@ class ScheduleBot:
         return Question()
 
     def generate_answer(self, question, name):
-        answer = name + ", "
+        answer = name[0] + ", "
         qtype = question.question_type
         qtime = question.time_type
         now = datetime.datetime.now(datetime.timezone(datetime.timedelta()))
