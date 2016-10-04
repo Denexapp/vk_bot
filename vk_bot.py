@@ -21,5 +21,5 @@ if __name__ == '__main__':
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
     schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
 
-    curio.run(status_checker.run())
-    curio.run(schedule.run())
+    curio.spawn(status_checker.run())
+    curio.spawn(schedule.run())
