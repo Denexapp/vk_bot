@@ -17,12 +17,15 @@ class StatusChecker:
         print("StatusChecker: Received name {}".format(self.name))
         while True:
             status = await vk_tools.get_status(self.target, self.queue, self.api)
-            print("StatusChecker: {} still has status {}".format(self.name, status))
-            if status is None:
+
+            if self.status is None:
                 self.status = status
             elif status != self.status:
                 self.status = status
-                await vk_tools.send_message(self.listener, "{} has changed {} status to \"{}\""
-                                            .format(self.name, "her" if self.gender else "his", status),
-                                            self.queue, self.api)
+                message = "{} has changed {} status to \"{}\""\
+                    .format(self.name, "her" if self.gender else "his", status)
+                print("StatusChecker: " + message)
+                await vk_tools.send_message(self.listener, message, self.queue, self.api)
+            else:
+                print("StatusChecker: {} still has status {}".format(self.name, status))
             await asyncio.sleep(10)
