@@ -21,7 +21,7 @@ class ScheduleBot:
         if not message.startswith("бот " or "бот," or "бот!" or "бот:"):
             return
         # todo разобраться с таймзонами
-        date = datetime.datetime.now(datetime.tzinfo())
+        date = datetime.datetime.utcnow()
         message = message[4:]
         message = re.sub(r"\d", " ", message)
         words = [word for word in re.split("\W", message) if word != ""]
