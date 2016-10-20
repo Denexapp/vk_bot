@@ -1,4 +1,5 @@
 import os
+import time
 import vk
 import myqueue as queue_file
 import status_checker as status_checker_file
@@ -23,4 +24,5 @@ if __name__ == '__main__':
     status_checker.run()
     schedule.run()
 
-
+    while True:
+        time.sleep(100)
