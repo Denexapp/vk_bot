@@ -10,7 +10,7 @@ class VkBot:
     def run(self):
         def restart_loop():
             try:
-                threading.Thread(target=self.loop)
+                threading.Thread(target=self.loop).run()
             except Exception as e:
                 print(e)
                 print("Thread throw an exception, restart in 10 seconds")
