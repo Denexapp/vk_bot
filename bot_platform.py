@@ -23,5 +23,4 @@ if __name__ == '__main__':
     status_checker.run()
     schedule.run()
 
-    print("end")
 
