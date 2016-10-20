@@ -21,11 +21,13 @@ if __name__ == '__main__':
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
     schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
 
-    async def tasks():
-        await curio.spawn(status_checker.run())
-        await curio.spawn(schedule.run())
+    # async def tasks():
+    #     await curio.spawn(status_checker.run())
+    #     await curio.spawn(schedule.run())
 
-    curio.run(tasks())
+    # curio.run(tasks())
+    curio.run(curio.spawn(status_checker.run()))
+    curio.run(curio.spawn(schedule.run()))
 
     print("end")
 
