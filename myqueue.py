@@ -1,6 +1,5 @@
 import time
 import threading
-import curio
 
 
 class Queue:
@@ -20,15 +19,15 @@ class Queue:
         else:
             return 0
 
-    async def enqueue(self, function, *args, **kwargs):
+    def enqueue(self, function, *args, **kwargs):
         self.queue_lock.acquire()
         self.queue_last_item = self.increment(self.queue_last_item)
         queue_number = self.queue_last_item
         self.queue_lock.release()
         while not queue_number == self.queue_current:
-            await curio.sleep(0.2)
+            time.sleep(0.2)
         sleep_time = self.last_request_time - time.time() + 1
-        await curio.sleep(sleep_time if sleep_time >= 0 else 0)
+        time.sleep(sleep_time if sleep_time >= 0 else 0)
         result = function(*args, **kwargs)
         self.queue_current = self.increment(self.queue_current)
         return result

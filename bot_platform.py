@@ -1,5 +1,4 @@
 import os
-import curio
 import vk
 import myqueue as queue_file
 import status_checker as status_checker_file
@@ -21,11 +20,8 @@ if __name__ == '__main__':
     status_checker = status_checker_file.StatusChecker(queue, listener, target, api)
     schedule = schedule_file.ScheduleBot(schedule_filename, schedule_dialogue, queue, api)
 
-    async def tasks():
-        await curio.spawn(status_checker.run())
-        await curio.spawn(schedule.loop())
-
-    curio.run(tasks())
+    status_checker.run()
+    schedule.run()
 
     print("end")
 

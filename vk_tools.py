@@ -50,8 +50,8 @@ def api_get_last_messages(user_id, api):
     return api.messages.getHistory(user_id=user_id, offset=0, count=20, start_message_id=0, v="4.104")
 
 
-async def get_name(target, queue, api):
-    info = (await queue.enqueue(api_get_name, target, api))[0]
+def get_name(target, queue, api):
+    info = (queue.enqueue(api_get_name, target, api))[0]
     result = {
         "first_name": info["first_name"],
         "last_name": info["last_name"],
@@ -62,20 +62,17 @@ async def get_name(target, queue, api):
     return result
 
 
-async def get_status(target, queue, api):
+def get_status(target, queue, api):
     while True:
-        try:
-            return (await queue.enqueue(api_get_status, target, api))[0]["status"]
-        except requests.exceptions.ReadTimeout:
-            pass
+        return (queue.enqueue(api_get_status, target, api))[0]["status"]
 
 
-async def send_message(target, message, queue, api):
-    await queue.enqueue(api_send_message, target, message, api)
+def send_message(target, message, queue, api):
+    queue.enqueue(api_send_message, target, message, api)
 
 
-async def get_last_messages(user_id, queue, api):
-    result = await queue.enqueue(api_get_last_messages, user_id, api)
+def get_last_messages(user_id, queue, api):
+    result = queue.enqueue(api_get_last_messages, user_id, api)
     messages = [(message["mid"], message["from_id"], message["body"]) for message in result if type(message) != int]
     messages.reverse()
     return messages

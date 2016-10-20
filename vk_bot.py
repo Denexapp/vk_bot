@@ -1,17 +1,14 @@
-import curio
+import threading
 
 
 class VkBot:
     def __init__(self, api, queue):
         self.api = api
         self.queue = queue
+        self.thread = threading.Thread(target=self.loop)
 
-    async def run(self):
-        try:
-            print("DECORATOR")
-            await self.loop()
-        except curio.TaskError:
-            raise Exception
+    def run(self):
+        self.thread.run()
 
-    async def loop(self):
+    def loop(self):
         pass

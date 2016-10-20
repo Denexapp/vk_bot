@@ -1,16 +1,15 @@
 import vk_tools
-import curio
 import time
+import vk_bot
 import re
 
 
-class ScheduleBot:
+class ScheduleBot(vk_bot.VkBot):
     def __init__(self, filename, dialogue, queue, api):
+        super(ScheduleBot, self).__init__(api, queue)
         self.dialogue = dialogue
         self.last_message_id = None
         self.schedule = Schedule(filename)
-        self.api = api
-        self.queue = queue
 
     def lesson_to_text(self, lesson):
         #todo
@@ -29,10 +28,10 @@ class ScheduleBot:
                 answer += "список преподавателей, учивших"
         return answer
 
-    async def loop(self):
+    def loop(self):
         print("Schedule: started.")
         while True:
-            messages = await vk_tools.get_last_messages(self.dialogue, self.queue, self.api)
+            messages = vk_tools.get_last_messages(self.dialogue, self.queue, self.api)
             if self.last_message_id is None:
                 self.last_message_id = messages[len(messages)-1][2]
             for mid, user, message in messages:
@@ -44,11 +43,11 @@ class ScheduleBot:
                 if not question:
                     continue
                 print("Schedule: question user is {}".format(user))
-                name = await vk_tools.get_name(user, self.queue, self.api)["name"]
+                name = vk_tools.get_name(user, self.queue, self.api)["name"]
                 print("Schedule: username is {}".format(name))
                 answer = self.generate_answer(question, name)
-                await vk_tools.send_message(self.dialogue, answer, self.queue, self.api)
-            await curio.sleep(10)
+                vk_tools.send_message(self.dialogue, answer, self.queue, self.api)
+            time.sleep(10)
 
 
 class Schedule:
