@@ -23,6 +23,9 @@ if __name__ == '__main__':
 
     async def tasks():
         await curio.spawn(status_checker.run())
-        await curio.spawn(schedule.run())
+        # await curio.spawn(schedule.run())
 
-    curio.run(tasks(), pdb=True)
+    curio.run(tasks())
+
+    print("end")
+
