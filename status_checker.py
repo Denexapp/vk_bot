@@ -1,13 +1,13 @@
 import vk_tools
 import curio
+import vk_bot
 
 
-class StatusChecker:
+class StatusChecker(vk_bot.VkBot):
     def __init__(self, queue, listener, target, api):
-        self.queue = queue
+        super(StatusChecker, self).__init__(api, queue)
         self.listener = listener
         self.target = "id" + str(target)
-        self.api = api
         self.status = None
         self.name = None
         self.gender = None
