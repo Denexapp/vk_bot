@@ -8,7 +8,7 @@ class VkBot:
         self.thread = threading.Thread(target=self.loop)
 
     def run(self):
-        self.thread.run()
+        self.thread.start()
 
     def loop(self):
         pass
