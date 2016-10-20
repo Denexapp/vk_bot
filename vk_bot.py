@@ -6,16 +6,12 @@ class VkBot:
         self.api = api
         self.queue = queue
 
-    @terminate_on_error
     async def run(self):
-        pass
-
-
-def terminate_on_error(function):
-    def new_function(*args, **kwargs):
         try:
             print("DECORATOR")
-            function(*args, **kwargs)
+            await self.loop()
         except curio.TaskError:
             raise Exception
-    return new_function
+
+    async def loop(self):
+        pass

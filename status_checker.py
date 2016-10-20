@@ -12,7 +12,7 @@ class StatusChecker(vk_bot.VkBot):
         self.name = None
         self.gender = None
 
-    async def run(self):
+    async def loop(self):
         print("StatusChecker: started.")
         target_info = await vk_tools.get_name(self.target, self.queue, self.api)
         self.name = target_info["name"]

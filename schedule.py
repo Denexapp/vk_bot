@@ -29,7 +29,7 @@ class ScheduleBot:
                 answer += "список преподавателей, учивших"
         return answer
 
-    async def run(self):
+    async def loop(self):
         print("Schedule: started.")
         while True:
             messages = await vk_tools.get_last_messages(self.dialogue, self.queue, self.api)
