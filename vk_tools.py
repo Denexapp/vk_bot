@@ -4,39 +4,48 @@ import time
 import os
 
 
-def handle_captcha(function):
+def handle_request(function):
     def new_function(*args, **kwargs):
-        try:
-            return function(*args, **kwargs)
-        except vk.exceptions.VkAPIError as e:
-            # todo handle only captcha
-            sid = e.captcha_sid
-            img = e.captcha_img
-            print("Captcha img available at {}".format(img))
-            time.sleep(60)
-            key = requests.get(os.environ["captcha_solution_url"]).content
-            print("Captcha key is {}".format(key))
-            return function(*args, **kwargs, captcha_key=key, captcha_sid=sid)
+        while True:
+            try:
+                return function(*args, **kwargs)
+            except vk.exceptions.VkAPIError as e:
+                # todo code review
+                if e.is_captcha_needed is False:
+                    raise
+                sid = e.captcha_sid
+                img = e.captcha_img
+                print("Captcha img available at {}".format(img))
+                time.sleep(120)
+                key = new_function(requests.get(os.environ["captcha_solution_url"]).content)
+                print("Captcha key is {}".format(key))
+                while True:
+                    try:
+                        return function(*args, **kwargs, captcha_key=key, captcha_sid=sid)
+                    except requests.exceptions.ReadTimeout:
+                        pass
 
+            except requests.exceptions.ReadTimeout:
+                pass
     return new_function
 
 
-@handle_captcha
+@handle_request
 def api_get_status(target, api):
     return api.users.get(user_ids=target, fields="status")
 
 
-@handle_captcha
+@handle_request
 def api_get_name(target, api):
     return api.users.get(user_ids=target, fields="sex")
 
 
-@handle_captcha
+@handle_request
 def api_send_message(target, message, api):
     return api.messages.send(user_id=target, message=message, v="4.104")
 
 
-@handle_captcha
+@handle_request
 def api_get_last_messages(user_id, api):
     return api.messages.getHistory(user_id=user_id, offset=0, count=20, start_message_id=0, v="4.104")
 

@@ -1,6 +1,5 @@
 import vk_tools
 import curio
-import datetime
 import time
 import re
 
@@ -14,33 +13,8 @@ class ScheduleBot:
         self.queue = queue
 
     def lesson_to_text(self, lesson):
+        #todo
         pass
-
-    def decode_message(self, message):
-        message = str(message).lower().strip()
-        if not message.startswith("бот " or "бот," or "бот!" or "бот:"):
-            return
-        # todo разобраться с таймзонами
-        date = datetime.datetime.utcnow()
-        message = message[4:]
-        message = re.sub(r"\d", " ", message)
-        words = [word for word in re.split("\W", message) if word != ""]
-        if "сегодня" in words:
-            pass
-            # todo
-        elif "завтра" in words:
-            pass
-            # todo
-        else:
-            # todo
-            weekdays = self.schedule.get_weekdays()
-            for x in range(len(weekdays)):
-                if weekdays[x][:-1].lower() in words:
-                    pass
-                    # todo
-                    break
-        # todo
-        return Question()
 
     def generate_answer(self, question, name):
         answer = name[0] + ", "
@@ -82,6 +56,7 @@ class Schedule:
         self.lessons_start_time = {}
         self.duration = 0
         self.schedule = []
+        self.timezone = 0
 
         with open(filename) as file:
             self.timezone = int(file.readline().split(":")[1].strip())
@@ -95,7 +70,6 @@ class Schedule:
                 lesson_time = time.strptime(line[1], "%H:%M")
                 self.lessons_start_time[key] = lesson_time
 
-            week_day = ""
             lessons = None
             while True:
                 line = file.readline()
@@ -103,10 +77,9 @@ class Schedule:
                     break
                 line = line.strip()
                 if line.startswith(">"):
-                    week_day = line[1:].strip()
                     lessons = {}
                 elif line.startswith("."):
-                    self.schedule.append((week_day, lessons))
+                    self.schedule.append(lessons)
                 else:
                     divider = line.find(" ")
                     key = line[0:divider]
@@ -140,6 +113,7 @@ class Schedule:
     def get_weekdays(self):
         return [day[0] for day in self.schedule]
 
+
 class Lesson:
     def __init__(self, name, time, number, rooms=None, teacher=None):
         self.name = name
@@ -148,27 +122,4 @@ class Lesson:
         self.rooms = [] if rooms is None else rooms
         self.teacher = teacher
 
-class QuestionType:
-    incorrect = -1
-    teacher = 0
-    where = 1
-    amount = 2
-    which = 3
-    help = 4
 
-class TimeType:
-    was = -2
-    previous = -1
-    current = 0
-    next = 1
-    left = 2
-    time = 4
-    number = 5
-
-class Question:
-    def __init__(self):
-        self.time_type = TimeType.current
-        self.question_type = QuestionType.incorrect
-        self.time = None
-        self.day = None
-        self.lesson_number = None
