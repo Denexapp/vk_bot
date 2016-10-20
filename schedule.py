@@ -44,7 +44,7 @@ class ScheduleBot:
                 if not question:
                     continue
                 print("Schedule: question user is {}".format(user))
-                name = await vk_tools.get_name(user, self.queue, self.api)
+                name = await vk_tools.get_name(user, self.queue, self.api)["name"]
                 print("Schedule: username is {}".format(name))
                 answer = self.generate_answer(question, name)
                 await vk_tools.send_message(self.dialogue, answer, self.queue, self.api)

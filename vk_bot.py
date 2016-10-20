@@ -25,4 +25,4 @@ if __name__ == '__main__':
         await curio.spawn(status_checker.run())
         await curio.spawn(schedule.run())
 
-    curio.run(tasks())
+    curio.run(tasks(), pdb=True)

@@ -52,11 +52,14 @@ def api_get_last_messages(user_id, api):
 
 async def get_name(target, queue, api):
     info = (await queue.enqueue(api_get_name, target, api))[0]
-    first_name = info["first_name"]
-    last_name = info["last_name"]
-    name = first_name + " " + last_name
-    gender = info["sex"] == 1
-    return name, gender, first_name, last_name
+    result = {
+        "first_name": info["first_name"],
+        "last_name": info["last_name"],
+        "name": info["first_name"] + " " + info["last_name"],
+        "gender": info["sex"] == 1
+    }
+
+    return result
 
 
 async def get_status(target, queue, api):

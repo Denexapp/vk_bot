@@ -14,7 +14,9 @@ class StatusChecker:
 
     async def run(self):
         print("StatusChecker: started.")
-        self.name, self.gender = await vk_tools.get_name(self.target, self.queue, self.api)
+        target_info = await vk_tools.get_name(self.target, self.queue, self.api)
+        self.name = target_info["name"]
+        self.gender = target_info["gender"]
         print("StatusChecker: Received name {}".format(self.name))
         while True:
             status = await vk_tools.get_status(self.target, self.queue, self.api)
